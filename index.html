@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>힘의 합력과 평형 | 중학교 과학 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F6FB; --surface:#FFFFFF; --ink:#1D2433; --muted:#5B6578; --line:#DCE3EE;
+  --brand:#0E8A7E; --brand-soft:#E0F3F1; --brand-ink:#FFFFFF;
+  --f1:#E0413A; --f1-soft:#FDE9E8; --f2:#1F63C8; --f2-soft:#E6EEFB;
+  --net:#7B3FD6; --net-soft:#F1EAFD;
+  --ok:#1E9E62; --ok-soft:#E3F6EC; --bad:#D6453D; --bad-soft:#FCE8E7;
+  --note:#FFF6DB; --note-line:#F0D98A;
+  --grid:#D6E4F3; --grid-major:#AFC8E6; --lane:#8FA9C9;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121722; --surface:#1B2230; --ink:#E8EDF6; --muted:#9AA6BA; --line:#2C3547;
+    --brand:#3CC4B4; --brand-soft:#16312F; --brand-ink:#0D1A19;
+    --f1:#FF6B63; --f1-soft:#3A1F20; --f2:#5B9BFF; --f2-soft:#1B2A45;
+    --net:#B38CFF; --net-soft:#2A2140;
+    --ok:#3ECF8E; --ok-soft:#173427; --bad:#FF7A72; --bad-soft:#3A1F20;
+    --note:#2F2A1A; --note-line:#6B5B24;
+    --grid:#243246; --grid-major:#34496A; --lane:#4E6A92;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121722; --surface:#1B2230; --ink:#E8EDF6; --muted:#9AA6BA; --line:#2C3547;
+  --brand:#3CC4B4; --brand-soft:#16312F; --brand-ink:#0D1A19;
+  --f1:#FF6B63; --f1-soft:#3A1F20; --f2:#5B9BFF; --f2-soft:#1B2A45;
+  --net:#B38CFF; --net-soft:#2A2140;
+  --ok:#3ECF8E; --ok-soft:#173427; --bad:#FF7A72; --bad-soft:#3A1F20;
+  --note:#2F2A1A; --note-line:#6B5B24;
+  --grid:#243246; --grid-major:#34496A; --lane:#4E6A92;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 110px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.7;font-size:17px;word-break:keep-all}
+h1,h2,h3,.brand,.hand{font-family:"Jua","Noto Sans KR",sans-serif;font-weight:400}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px;border-radius:8px}
+
+/* header */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar .in{max-width:1040px;margin:0 auto;padding:10px 18px 0}
+.brand{font-size:22px;display:flex;align-items:center;gap:8px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips a{flex:none;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--bg)}
+.chips a:hover{color:var(--brand);border-color:var(--brand)}
+.chips a.hl{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+
+main{max-width:1040px;margin:0 auto;padding:18px 18px 40px}
+.crumb{font-size:14px;color:var(--muted);margin:4px 0 14px}
+
+/* hero */
+.hero{position:relative;background:linear-gradient(135deg,var(--brand-soft),var(--net-soft));border-radius:24px;padding:34px 30px;overflow:hidden;margin-bottom:22px}
+.hero h1{font-size:clamp(30px,5vw,44px);margin:0 0 8px;line-height:1.25}
+.hero p{margin:0;max-width:34em;color:var(--muted)}
+.hero .floaters{position:absolute;right:26px;top:50%;transform:translateY(-50%);display:flex;gap:10px;font-size:42px}
+@media (max-width:720px){.hero .floaters{position:static;transform:none;margin-top:16px;font-size:34px}}
+
+/* sections */
+.sec{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:26px 26px 24px;margin:0 0 18px}
+.eyebrow{display:inline-block;font-size:14px;font-weight:700;color:var(--brand);background:var(--brand-soft);padding:3px 10px;border-radius:999px}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin:10px 0 14px}
+.sec-head h2{margin:0;font-size:clamp(22px,3.4vw,28px);line-height:1.35}
+.page{flex:none;font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:2px 8px;margin-top:4px}
+p{margin:0 0 10px}
+strong{font-weight:700}
+
+.goal{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px dashed var(--line)}
+.goal:first-of-type{border-top:0}
+.num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font-weight:700;font-size:15px}
+
+.btn{border:0;border-radius:12px;padding:9px 16px;font-weight:700;background:var(--brand);color:var(--brand-ink)}
+.btn.ghost{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.btn.small{padding:6px 12px;font-size:14px}
+.reveal{display:none;margin-top:12px;padding:14px 16px;border-radius:14px;background:var(--brand-soft);border-left:5px solid var(--brand)}
+.reveal.show{display:block}
+
+.think{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.think .big{font-size:56px;line-height:1}
+@media (max-width:560px){.think{grid-template-columns:1fr}}
+
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media (max-width:720px){.rule-grid{grid-template-columns:1fr}}
+.rule{border:1px solid var(--line);border-radius:16px;padding:16px 18px;background:var(--bg)}
+.rule h3{margin:0 0 8px;font-size:20px}
+.mini{display:block;width:100%;height:auto;margin:6px 0 10px}
+.rule dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:16px}
+.rule dt{font-weight:700;color:var(--muted)}
+.rule dd{margin:0}
+
+.tip{background:var(--note);border:1px solid var(--note-line);border-radius:14px;padding:12px 16px;font-size:15px;margin-top:14px}
+
+/* simulation */
+.modes{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 14px}
+.mode{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:9px 16px;font-weight:700}
+.mode[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.board{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:10px}
+#sim{display:block;width:100%;height:auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.caption{font-size:13px;color:var(--muted);text-align:right;margin:4px 6px 0}
+.panel{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+@media (max-width:720px){.panel{grid-template-columns:1fr}}
+.ctl{border-radius:14px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ctl .lbl{font-weight:700;font-size:15px}
+.ctl .val{font-size:15px}
+.ctl .step{display:flex;gap:6px}
+.ctl .step button{width:38px;height:38px;border-radius:10px;border:0;font-weight:900;font-size:16px;background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.ctl .step button:disabled{opacity:.35;cursor:default}
+.c1{background:var(--f1-soft)} .c1 .lbl{color:var(--f1)}
+.c2{background:var(--f2-soft)} .c2 .lbl{color:var(--f2)}
+.c3{background:var(--net-soft)} .c3 .lbl{color:var(--net)}
+.result{margin-top:12px;border-radius:14px;padding:14px 16px;background:var(--bg);border:1px solid var(--line);min-height:56px}
+.result .formula{font-family:"Jua",sans-serif;font-size:24px;color:var(--net)}
+.result.ok{background:var(--ok-soft);border-color:var(--ok)}
+.result.bad{background:var(--bad-soft);border-color:var(--bad)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.score{margin-left:auto;font-size:15px;color:var(--muted)}
+.types{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:14px;color:var(--muted)}
+.types button{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:4px 12px;font-size:14px}
+.types button[aria-pressed="true"]{border-color:var(--net);color:var(--net);background:var(--net-soft);font-weight:700}
+.hidden{display:none!important}
+
+.lane-hit{cursor:ew-resize}
+.lane-lock{cursor:default}
+#box{transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+@media (prefers-reduced-motion:reduce){#box{transition:none}html{scroll-behavior:auto}}
+
+.steps{counter-reset:s;margin:0;padding:0;list-style:none}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px dashed var(--line)}
+.steps li:first-child{border-top:0}
+
+/* quiz */
+.q{padding:16px 0;border-top:1px dashed var(--line)}
+.q:first-of-type{border-top:0;padding-top:4px}
+.q .ask{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.choices{display:flex;gap:8px;flex-wrap:wrap}
+.choice{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:8px 16px;font-weight:700}
+.choice.right{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.choice.wrong{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.fb{display:none;margin-top:10px;padding:12px 14px;border-radius:12px;font-size:16px}
+.fb.show{display:block}
+.fb.ok{background:var(--ok-soft)} .fb.no{background:var(--bad-soft)}
+
+.recap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:720px){.recap{grid-template-columns:1fr}}
+.recap .card{border-radius:16px;padding:16px 18px}
+.recap .same{background:var(--f1-soft)} .recap .opp{background:var(--f2-soft)}
+.recap .card h3{margin:0 0 6px;font-size:20px}
+
+.eval{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px dashed var(--line)}
+.eval:first-of-type{border-top:0}
+.stars{display:flex;gap:2px;flex:none}
+.stars button{background:none;border:0;font-size:26px;color:var(--line);padding:0 2px;line-height:1}
+.stars button.on{color:#F2B705}
+
+footer{text-align:center;color:var(--muted);font-size:14px;padding:10px 0 30px}
+
+/* ---- 추가 스타일 ---- */
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.home{flex:none;text-decoration:none;font-size:14px;font-weight:700;color:var(--brand);border:1.5px solid var(--brand);border-radius:999px;padding:4px 12px}
+.home:hover{background:var(--brand);color:var(--brand-ink)}
+
+.fig{margin:0;border:1px solid var(--line);border-radius:16px;background:#FFFFFF;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.fig img{display:block;max-width:100%;height:auto}
+.fig figcaption{font-size:14px;color:#5B6578;margin-top:6px;text-align:center}
+.fig.wide img{max-height:340px}
+.pair{display:grid;grid-template-columns:1.25fr 1fr;gap:12px;margin:12px 0}
+@media (max-width:720px){.pair{grid-template-columns:1fr}}
+
+.case{border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:14px;background:var(--bg)}
+.case h3{margin:0 0 6px;font-size:21px}
+.case.same{border-left:6px solid var(--f1)}
+.case.opp{border-left:6px solid var(--f2)}
+.eq{display:inline-block;font-family:"Jua",sans-serif;font-size:20px;color:var(--net);background:var(--net-soft);border-radius:10px;padding:2px 12px;margin:4px 0}
+
+.def{border-radius:16px;padding:16px 18px;background:var(--net-soft);border-left:6px solid var(--net);margin:6px 0 14px;font-size:18px}
+.conds{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+@media (max-width:720px){.conds{grid-template-columns:1fr}}
+.cond{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--surface)}
+.cond b{display:block;font-family:"Jua",sans-serif;font-weight:400;font-size:19px;color:var(--net)}
+
+.judge{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+@media (max-width:720px){.judge{grid-template-columns:1fr}}
+.jcard{border:1px solid var(--line);border-radius:16px;padding:12px 14px;background:var(--bg)}
+.jcard svg{display:block;width:100%;height:auto}
+.jcard .tag{font-weight:700;color:var(--muted);font-size:14px}
+.jcard .choices{margin-top:6px}
+
+.blank{font:inherit;font-weight:700;width:8em;max-width:100%;text-align:center;border:0;border-bottom:2.5px solid var(--brand);background:transparent;color:var(--ink);padding:0 4px;margin:0 4px}
+.blank.right{border-color:var(--ok);color:var(--ok)}
+.blank.wrong{border-color:var(--bad);color:var(--bad)}
+
+.bogi{border:1.5px dashed var(--line);border-radius:14px;padding:10px 14px;margin:6px 0 10px;background:var(--bg)}
+.bogi .it{display:flex;gap:10px;align-items:flex-start;padding:4px 0}
+.pick{flex:none;width:34px;height:34px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-weight:700}
+.pick[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+
+.match{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;margin:6px 0 10px}
+.match select{font:inherit;font-size:16px;padding:7px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);max-width:100%}
+.match select.right{border-color:var(--ok);background:var(--ok-soft)}
+.match select.wrong{border-color:var(--bad);background:var(--bad-soft)}
+
+.recap6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:860px){.recap6{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.recap6{grid-template-columns:1fr}}
+.rc{border:1px solid var(--line);border-radius:16px;padding:14px 16px;background:var(--bg)}
+.rc .ic{font-size:26px;line-height:1}
+.rc b{display:block;font-family:"Jua",sans-serif;font-weight:400;font-size:19px;margin:6px 0 2px}
+
+.video{display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:linear-gradient(135deg,var(--f2-soft),var(--brand-soft));border-radius:18px;padding:20px}
+.video .play{flex:none;width:64px;height:64px;border-radius:50%;background:var(--f2);color:#fff;display:grid;place-items:center;font-size:26px}
+.video .txt{flex:1;min-width:200px}
+.video a.btn{text-decoration:none;display:inline-block}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="in">
+    <div class="brandrow">
+      <div class="brand">💪 힘의 작용 연구소</div>
+      <a class="home" href="https://2026-1y-sub.vercel.app/">🏠 목록으로</a>
+    </div>
+    <nav class="chips" aria-label="학습 순서">
+      <a href="#prev">이전 내용 확인</a>
+      <a href="#goal">학습 목표</a>
+      <a href="#think">생각 깨우기</a>
+      <a href="#lab" class="hl">해보기 ｜ 합력 구하기</a>
+      <a href="#concept1">합력</a>
+      <a href="#concept2">힘의 평형</a>
+      <a href="#check">스스로 확인하기</a>
+      <a href="#more">개념 확인 문제</a>
+      <a href="#recap">배운 내용 정리</a>
+      <a href="#eval">평가 길잡이</a>
+      <a href="#video">개념 영상</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="crumb">5. 힘의 작용 › 힘의 합력과 평형</div>
+
+  <section class="hero">
+    <h1>줄다리기 줄이 꼼짝 않는 까닭은?</h1>
+    <p>양쪽에서 힘껏 당기는데도 줄이 움직이지 않을 때가 있어요. 한 물체에 여러 힘이 작용할 때 그 힘들을 하나로 합치는 방법과, 힘이 서로 평형을 이루는 조건을 알아봐요.</p>
+    <div class="floaters" aria-hidden="true"><span>🪢</span><span>⚖️</span><span>📦</span></div>
+  </section>
+
+  <!-- 이전 내용 -->
+  <section class="sec" id="prev">
+    <span class="eyebrow">↩ 이전 내용 확인하기</span>
+    <div class="sec-head"><h2>힘을 화살표로 나타내는 방법, 기억나나요?</h2></div>
+    <svg class="mini" viewBox="0 0 520 90" style="max-width:520px" aria-label="작용점에서 오른쪽으로 4칸 뻗은 화살표">
+      <g stroke="var(--grid)" stroke-width="1">
+        <path d="M20 10V80M60 10V80M100 10V80M140 10V80M180 10V80M220 10V80M260 10V80M300 10V80M340 10V80M380 10V80M420 10V80M460 10V80M500 10V80M20 10H500M20 45H500M20 80H500"/>
+      </g>
+      <circle cx="140" cy="45" r="6" fill="var(--ink)"/>
+      <line x1="140" y1="45" x2="284" y2="45" stroke="var(--f1)" stroke-width="7"/>
+      <polygon points="300,45 282,34 282,56" fill="var(--f1)"/>
+      <text x="140" y="74" text-anchor="middle" font-size="13" fill="var(--muted)">(가)</text>
+      <text x="220" y="30" text-anchor="middle" font-size="13" fill="var(--muted)">(다)</text>
+      <text x="316" y="50" font-size="13" fill="var(--muted)">(나)</text>
+    </svg>
+    <p>1칸이 1 N일 때, 화살표의 (가) 시작점, (나) 방향, (다) 길이는 각각 무엇을 나타낼까?</p>
+    <button class="btn small" data-reveal="r-prev">정답 확인</button>
+    <div class="reveal" id="r-prev">📌 (가) 시작점은 <strong>힘의 작용점</strong>, (나) 방향은 <strong>힘의 방향</strong>, (다) 길이는 <strong>힘의 크기</strong>예요. 이 화살표는 <strong>오른쪽으로 4 N</strong>의 힘을 나타내요.</div>
+  </section>
+
+  <!-- 학습 목표 -->
+  <section class="sec" id="goal">
+    <span class="eyebrow">🎯 이 단원을 배우면</span>
+    <div class="sec-head"><h2>학습 목표</h2><span class="page">교과서 158~159쪽</span></div>
+    <div class="goal"><span class="num">1</span><div><strong>나란하게 작용하는 두 힘의 합력</strong>을 구할 수 있다.</div></div>
+    <div class="goal"><span class="num">2</span><div><strong>힘의 평형</strong>의 뜻과 <strong>두 힘의 평형 조건</strong>을 설명할 수 있다.</div></div>
+  </section>
+
+  <!-- 생각 깨우기 -->
+  <section class="sec" id="think">
+    <span class="eyebrow">💭 생각 깨우기</span>
+    <div class="sec-head"><h2>팽팽한 줄다리기, 줄은 왜 움직이지 않을까?</h2><span class="page">교과서 158쪽</span></div>
+    <figure class="fig wide"><img src="images/tug-of-war.png" alt="두 팀이 가운데 선을 사이에 두고 줄을 팽팽하게 당기며 줄다리기를 하는 모습"></figure>
+    <p style="margin-top:14px">두 팀이 서로 반대 방향으로 힘껏 줄을 당기고 있어요. 그런데 줄은 가운데에서 꼼짝도 하지 않아요. 줄에 힘이 작용하고 있는데도 움직이지 않는 까닭은 무엇일까?</p>
+    <button class="btn small" data-reveal="r-think">💡 생각 확인하기</button>
+    <div class="reveal" id="r-think">두 팀이 줄을 <strong>같은 크기의 힘</strong>으로 <strong>반대 방향</strong>으로 당기면, 줄에 작용하는 두 힘을 합친 힘(합력)이 <strong>0</strong>이 되어 줄이 움직이지 않아요. 한 물체에 작용하는 여러 힘은 어떻게 합칠 수 있는지 알아보자.</div>
+  </section>
+
+  <!-- 해보기 (이전 합력 시뮬레이션) -->
+  <section class="sec" id="lab">
+    <span class="eyebrow">🔬 해 보기</span>
+    <div class="sec-head"><h2>나란하게 작용하는 힘의 합력 구하기</h2><span class="page">교과서 158쪽</span></div>
+    <p>🧰 준비물: 스마트 기기 &nbsp;|&nbsp; 모눈 <strong>1칸 = 1 N</strong>, 점선은 물체(📦)의 작용점이에요.</p>
+
+    <div class="modes" role="group" aria-label="활동 방식">
+      <button class="mode" id="m-explore" aria-pressed="true">🧪 자유 탐구: 두 힘 조절하기</button>
+      <button class="mode" id="m-quiz" aria-pressed="false">✏️ 도전: 합력 화살표 그리기</button>
+    </div>
+
+    <p id="howto" style="font-size:15px;color:var(--muted)"></p>
+
+    <div class="board">
+      <svg id="sim" viewBox="0 0 800 380" role="img" aria-label="모눈 위 힘의 합력 시뮬레이션"></svg>
+      <div class="caption">단위: N · 모눈 1칸 = 1 N</div>
+    </div>
+
+    <div class="panel" id="panel"></div>
+
+    <div id="quiz-types" class="types hidden" style="margin-top:12px">문제 유형
+      <button data-type="mix" aria-pressed="true">섞어서</button>
+      <button data-type="same" aria-pressed="false">같은 방향</button>
+      <button data-type="opp" aria-pressed="false">반대 방향</button>
+    </div>
+
+    <div class="result" id="result" aria-live="polite"></div>
+
+    <div class="actions" id="actions"></div>
+
+    <div class="tip">🧭 <strong>활동 도움</strong> — 합력은 크기만 단순히 더하거나 빼는 계산이 아니에요. <strong>크기와 방향을 함께 가진 힘</strong>을 합치는 것이니, 화살표의 방향을 꼭 함께 확인해요. 두 힘의 크기를 같게, 방향을 반대로 맞추면 합력이 어떻게 되는지도 확인해 보자!</div>
+
+    <h3 style="margin:22px 0 6px;font-size:20px">📝 활동 후 설명해 보기</h3>
+    <ol class="steps">
+      <li><span class="num">1</span><div>같은 방향으로 작용하는 두 힘의 합력은 어떻게 구하는지 설명해 보자.
+        <div><button class="btn ghost small" data-reveal="r-l1" style="margin-top:6px">예시 답안 보기</button></div>
+        <div class="reveal" id="r-l1">같은 방향으로 작용하는 두 힘의 합력의 크기는 두 힘의 크기를 더한 값과 같고, 방향은 두 힘의 방향과 같다.</div></div></li>
+      <li><span class="num">2</span><div>반대 방향으로 작용하는 두 힘의 합력은 어떻게 구하는지 설명해 보자.
+        <div><button class="btn ghost small" data-reveal="r-l2" style="margin-top:6px">예시 답안 보기</button></div>
+        <div class="reveal" id="r-l2">반대 방향으로 작용하는 두 힘의 합력의 크기는 큰 힘에서 작은 힘을 뺀 값과 같고, 방향은 큰 힘의 방향과 같다.</div></div></li>
+    </ol>
+  </section>
+
+  <!-- 개념 1 : 합력 -->
+  <section class="sec" id="concept1">
+    <span class="eyebrow">📘 교과서 개념</span>
+    <div class="sec-head"><h2>나란하게 작용하는 두 힘의 합력</h2><span class="page">교과서 158쪽</span></div>
+    <div class="def">한 물체에 두 개 이상의 힘이 동시에 작용할 때, 이 힘들과 <strong>같은 효과</strong>를 나타내는 하나의 힘을 <strong>합력</strong>이라고 한다.</div>
+
+    <div class="case same">
+      <h3>👉👉 두 힘이 같은 방향으로 작용할 때</h3>
+      <p>두 사람이 상자를 같은 방향으로 50 N, 100 N의 힘으로 당기면, 상자에는 150 N의 힘 하나가 작용한 것과 같은 효과가 나타난다.</p>
+      <div class="pair">
+        <figure class="fig"><img src="images/pull-same-direction.png" alt="두 학생이 같은 방향으로 줄을 당겨 나무 상자를 끄는 모습"></figure>
+        <figure class="fig"><img src="images/net-force-same-grid.png" alt="모눈 위에 50 N과 100 N 화살표를 이어 붙여 합력 150 N 화살표를 나타낸 그림"><figcaption>50 N 화살표 끝에 100 N 화살표를 이어 그린다.</figcaption></figure>
+      </div>
+      <p>합력의 크기 = 두 힘의 크기를 <strong>더한 값</strong> &nbsp;/&nbsp; 합력의 방향 = 두 힘의 <strong>방향과 같다</strong></p>
+      <span class="eq">50 N + 100 N = 150 N</span>
+    </div>
+
+    <div class="case opp">
+      <h3>👉👈 두 힘이 반대 방향으로 작용할 때</h3>
+      <p>두 사람이 상자를 서로 반대 방향으로 100 N, 50 N의 힘으로 당기면, 상자에는 큰 힘의 방향으로 50 N의 힘 하나가 작용한 것과 같은 효과가 나타난다.</p>
+      <div class="pair">
+        <figure class="fig"><img src="images/pull-opposite-direction.png" alt="두 학생이 나무 상자의 양쪽에서 서로 반대 방향으로 줄을 당기는 모습"></figure>
+        <figure class="fig"><img src="images/net-force-opposite-grid.png" alt="모눈 위에 100 N 화살표 끝에서 반대 방향 50 N 화살표를 그려 합력 50 N을 나타낸 그림"><figcaption>100 N 화살표 끝에서 반대 방향으로 50 N 화살표를 그린다.</figcaption></figure>
+      </div>
+      <p>합력의 크기 = 큰 힘에서 작은 힘을 <strong>뺀 값</strong> &nbsp;/&nbsp; 합력의 방향 = <strong>큰 힘의 방향</strong>과 같다</p>
+      <span class="eq">100 N − 50 N = 50 N</span>
+    </div>
+  </section>
+
+  <!-- 개념 2 : 힘의 평형 -->
+  <section class="sec" id="concept2">
+    <span class="eyebrow">📘 교과서 개념</span>
+    <div class="sec-head"><h2>힘의 평형</h2><span class="page">교과서 159쪽</span></div>
+    <div class="def">한 물체에 여러 힘이 동시에 작용해도 <strong>합력이 0</strong>이면 물체는 힘을 받지 않은 것과 같다. 이처럼 한 물체에 작용하는 힘들의 합력이 0인 상태를 <strong>힘의 평형</strong>이라고 한다.</div>
+    <p>줄다리기에서 두 팀이 같은 크기의 힘으로 반대 방향으로 당기면 줄에 작용하는 합력이 0이 되어 줄이 움직이지 않는다. 이때 줄에 작용하는 두 힘은 평형을 이루고 있다.</p>
+
+    <figure class="fig" style="max-width:560px;margin:14px auto 4px"><img src="images/balance-two-forces.png" alt="나무 블록의 한 점에서 왼쪽으로 5 N, 오른쪽으로 5 N의 힘이 한 직선 위에서 작용하는 그림"><figcaption>그림 Ⅴ-4 두 힘의 평형 조건</figcaption></figure>
+
+    <h3 style="margin:16px 0 4px;font-size:20px">⚖️ 두 힘이 평형을 이루는 조건</h3>
+    <div class="conds">
+      <div class="cond"><b>① 크기가 같다</b>두 힘의 크기가 같아요. (5 N, 5 N)</div>
+      <div class="cond"><b>② 방향이 반대다</b>두 힘이 서로 반대쪽을 향해요.</div>
+      <div class="cond"><b>③ 같은 작용선 위</b>두 힘이 같은 직선 위에서 작용해요.</div>
+    </div>
+    <div class="tip">💡 힘의 평형 상태에서는 합력이 0이므로 정지해 있던 물체는 계속 정지해 있다. 책상 위에 가만히 놓인 책처럼 <strong>정지해 있는 물체</strong>에 작용하는 힘들은 평형을 이루고 있다.</div>
+
+    <h3 style="margin:22px 0 4px;font-size:20px">🔎 평형일까, 아닐까? 골라 보자</h3>
+    <p style="font-size:15px;color:var(--muted)">나무 블록에 작용하는 두 힘을 보고, 힘의 평형을 이루는지 판단해 보자.</p>
+    <div class="judge" id="judge"></div>
+  </section>
+
+  <!-- 스스로 확인하기 -->
+  <section class="sec" id="check">
+    <span class="eyebrow">✅ 스스로 확인하기</span>
+    <div class="sec-head"><h2>배운 내용, 확인해 볼까요?</h2><span class="page">교과서 159쪽</span></div>
+
+    <div class="q">
+      <div class="ask"><span class="num">1</span><div>문장을 완성해 보자.<br>한 물체에 두 개 이상의 힘이 동시에 작용할 때, 이 힘들과 같은 효과를 나타내는 하나의 힘을 <input class="blank" data-ans="합력" aria-label="빈칸 1">(이)라고 한다.</div></div>
+      <button class="btn small" data-blank>정답 확인</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">2</span><div>문장을 완성해 보자.<br>한 물체에 작용하는 힘들의 합력이 0인 상태를 <input class="blank" data-ans="힘의평형|평형" aria-label="빈칸 2">(이)라고 한다.</div></div>
+      <button class="btn small" data-blank>정답 확인</button>
+      <div class="fb"></div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">3</span><div><strong>탐구 능력</strong> | 한 물체에 <strong>세 힘</strong>이 작용하여 힘의 평형을 이루는 경우를 화살표를 이용해 나타내 보자.</div></div>
+      <button class="btn small ghost" data-reveal="r-hint3">💡 힌트</button>
+      <button class="btn small" data-reveal="r-ans3">예시 답안 보기</button>
+      <div class="reveal" id="r-hint3">한쪽 방향 힘들의 합과 반대쪽 방향 힘들의 합이 같으면 합력이 0이 돼요. 해 보기 시뮬레이션에서 합력이 0이 되는 경우를 떠올려 보자.</div>
+      <div class="reveal" id="r-ans3">
+        <figure class="fig" style="margin-bottom:10px"><img src="images/balance-three-forces-answer.png" alt="나무 블록에 왼쪽으로 3 N, 오른쪽으로 1 N과 2 N의 힘이 작용하는 그림"></figure>
+        오른쪽으로 작용하는 두 힘의 합력은 1 N + 2 N = <strong>3 N</strong>이고, 왼쪽으로 3 N의 힘이 작용하므로 전체 합력은 3 N − 3 N = <strong>0</strong>이다. 따라서 세 힘은 평형을 이룬다.
+      </div>
+    </div>
+  </section>
+
+  <!-- 개념 확인 문제 -->
+  <section class="sec" id="more">
+    <span class="eyebrow">✏️ 개념 확인 문제</span>
+    <div class="sec-head"><h2>조금 더 풀어볼까요?</h2><span class="page">합력 · 힘의 평형 연습 문제</span></div>
+
+    <div class="q">
+      <div class="ask"><span class="num">1</span><div>문장이 옳으면 O, 옳지 않으면 X를 선택해 보자.<br><strong>반대 방향으로 작용하는 두 힘의 합력의 방향은 작은 힘의 방향과 같다.</strong></div></div>
+      <div class="choices" data-answer="X">
+        <button class="choice">O</button><button class="choice">X</button>
+      </div>
+      <div class="fb" data-wrong="다시 생각해 보자! 반대 방향이면 합력은 <strong>어느 쪽 힘</strong>을 따라갈까?">정답은 <strong>X</strong>! 반대 방향으로 작용하는 두 힘의 합력의 방향은 <strong>큰 힘의 방향</strong>과 같아요.</div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">2</span><div>한 물체에 오른쪽으로 <strong>6 N</strong>, 왼쪽으로 <strong>2 N</strong>의 힘이 작용한다. 합력은?</div></div>
+      <div class="choices" data-answer="오른쪽 4 N">
+        <button class="choice">오른쪽 8 N</button><button class="choice">오른쪽 4 N</button><button class="choice">왼쪽 4 N</button><button class="choice">0 N</button>
+      </div>
+      <div class="fb">정답은 <strong>오른쪽 4 N</strong>! 반대 방향이니 6 N − 2 N = 4 N, 방향은 큰 힘(6 N)의 방향인 오른쪽이에요.</div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">3</span><div>두 사람이 상자를 같은 방향으로 각각 <strong>30 N</strong>, <strong>20 N</strong>의 힘으로 당길 때, 상자에 작용하는 합력의 크기는?</div></div>
+      <div class="choices" data-answer="50 N">
+        <button class="choice">10 N</button><button class="choice">30 N</button><button class="choice">50 N</button><button class="choice">600 N</button>
+      </div>
+      <div class="fb">정답은 <strong>50 N</strong>! 같은 방향이니 30 N + 20 N = 50 N이에요.</div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">4</span><div>두 힘이 평형을 이루는 조건을 알맞게 연결하시오.</div></div>
+      <div class="match" id="match">
+        <span>(1) 두 힘의 크기</span>
+        <select data-ans="같다" aria-label="(1) 두 힘의 크기"><option value="">선택하기</option><option>같다</option><option>다르다</option><option>반대이다</option><option>같은 직선 위에 있다</option></select>
+        <span>(2) 두 힘의 방향</span>
+        <select data-ans="반대이다" aria-label="(2) 두 힘의 방향"><option value="">선택하기</option><option>같다</option><option>다르다</option><option>반대이다</option><option>같은 직선 위에 있다</option></select>
+        <span>(3) 두 힘의 작용선</span>
+        <select data-ans="같은 직선 위에 있다" aria-label="(3) 두 힘의 작용선"><option value="">선택하기</option><option>같다</option><option>다르다</option><option>반대이다</option><option>같은 직선 위에 있다</option></select>
+      </div>
+      <button class="btn small" id="match-check">정답 확인</button>
+      <div class="fb" id="match-fb"></div>
+    </div>
+
+    <div class="q">
+      <div class="ask"><span class="num">5</span><div>힘의 평형을 이루고 있는 경우를 &lt;보기&gt;에서 모두 고르시오.</div></div>
+      <div class="bogi" id="bogi">
+        <div class="it"><button class="pick" aria-pressed="false" data-k="ㄱ">ㄱ</button><div>줄다리기에서 두 팀이 당기는 줄이 움직이지 않는다.</div></div>
+        <div class="it"><button class="pick" aria-pressed="false" data-k="ㄴ">ㄴ</button><div>두 사람이 같은 방향으로 밀어 상자가 움직이기 시작한다.</div></div>
+        <div class="it"><button class="pick" aria-pressed="false" data-k="ㄷ">ㄷ</button><div>책상 위에 책이 가만히 놓여 있다.</div></div>
+      </div>
+      <button class="btn small" id="bogi-check">정답 확인</button>
+      <div class="fb" id="bogi-fb"></div>
+    </div>
+  </section>
+
+  <!-- 정리 -->
+  <section class="sec" id="recap">
+    <span class="eyebrow">🧠 배운 내용 정리하기</span>
+    <div class="sec-head"><h2>이 단원에서 배운 내용을 정리해 보자.</h2><span class="page">교과서 158~159쪽</span></div>
+    <div class="recap6">
+      <div class="rc"><span class="ic">➕</span><b>합력</b>여러 힘과 같은 효과를 나타내는 하나의 힘</div>
+      <div class="rc" style="border-left:5px solid var(--f1)"><span class="ic">👉👉</span><b>같은 방향 두 힘</b>크기 = 두 힘의 합, 방향 = 두 힘의 방향<br><span style="color:var(--muted);font-size:15px">예) 50 N + 100 N = 150 N</span></div>
+      <div class="rc" style="border-left:5px solid var(--f2)"><span class="ic">👉👈</span><b>반대 방향 두 힘</b>크기 = 큰 힘 − 작은 힘, 방향 = 큰 힘의 방향<br><span style="color:var(--muted);font-size:15px">예) 100 N − 50 N = 50 N</span></div>
+      <div class="rc"><span class="ic">⚖️</span><b>힘의 평형</b>한 물체에 작용하는 힘들의 합력이 0인 상태</div>
+      <div class="rc"><span class="ic">📏</span><b>두 힘의 평형 조건</b>크기가 같고, 방향이 반대이며, 같은 작용선 위에 있다.</div>
+      <div class="rc"><span class="ic">🪢</span><b>평형의 예</b>움직이지 않는 줄다리기 줄, 책상 위에 가만히 놓인 책</div>
+    </div>
+  </section>
+
+  <!-- 평가 길잡이 -->
+  <section class="sec" id="eval">
+    <span class="eyebrow">🌱 평가 길잡이</span>
+    <div class="sec-head"><h2>활동을 잘했는지 생각하며 체크해 보자</h2><span class="page">교과서 158쪽</span></div>
+    <div class="eval"><div>시뮬레이션을 실행하고 같은 방향, 반대 방향으로 작용하는 두 힘의 합력을 각각 구했는가?</div><div class="stars"></div></div>
+    <div class="eval"><div>같은 방향, 반대 방향으로 작용하는 두 힘의 합력을 구하는 방법을 각각 설명할 수 있는가?</div><div class="stars"></div></div>
+    <div class="eval"><div>힘의 평형의 뜻과 두 힘의 평형 조건을 설명할 수 있는가?</div><div class="stars"></div></div>
+  </section>
+
+  <!-- 개념 영상 -->
+  <section class="sec" id="video">
+    <span class="eyebrow">🎬 개념 영상</span>
+    <div class="sec-head"><h2>영상으로 한 번 더 정리하기</h2></div>
+    <div class="video">
+      <div class="play" aria-hidden="true">▶</div>
+      <div class="txt"><p style="margin:0 0 10px">합력과 힘의 평형을 개념 영상으로 다시 확인해 보자. 영상은 새 탭에서 열려요.</p>
+        <a class="btn" href="https://q.mirae-n.com/H9Oeo" target="_blank" rel="noopener">🎬 개념 영상 보기</a></div>
+    </div>
+  </section>
+
+  <footer>미래엔 중학교 과학 1 · 5단원 힘의 작용 · 수업 학습자료</footer>
+</main>
+
+<script>
+(function(){
+  /* ---------- reveal / O·X / 선택 ---------- */
+  document.querySelectorAll('[data-reveal]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var el=document.getElementById(b.dataset.reveal);
+      var on=el.classList.toggle('show');
+      b.setAttribute('aria-expanded',on);
+    });
+  });
+  function bindChoices(g){
+    var ans=g.dataset.answer, fb=g.nextElementSibling;
+    fb.dataset.ok=fb.innerHTML;
+    var wrongMsg=fb.dataset.wrong||'다시 생각해 보자! 두 힘의 <strong>방향</strong>이 같은지 반대인지 먼저 확인해요.';
+    g.querySelectorAll('.choice').forEach(function(c){
+      c.addEventListener('click',function(){
+        g.querySelectorAll('.choice').forEach(function(x){x.classList.remove('right','wrong')});
+        var ok=c.textContent.trim()===ans;
+        c.classList.add(ok?'right':'wrong');
+        fb.classList.add('show');
+        fb.classList.toggle('ok',ok); fb.classList.toggle('no',!ok);
+        fb.innerHTML=ok?fb.dataset.ok:wrongMsg;
+      });
+    });
+  }
+
+  /* ---------- 평형 판별 카드 ---------- */
+  var J=[
+    {tag:'(가)',f:[{v:4,y:0},{v:-4,y:0}],ok:true,
+     why:'크기가 같고(4 N, 4 N), 방향이 반대이며, 같은 작용선 위에 있어 <strong>합력 0</strong> → 평형이에요.'},
+    {tag:'(나)',f:[{v:5,y:0},{v:-3,y:0}],ok:false,
+     why:'두 힘의 <strong>크기가 달라요</strong>. 합력은 5 N − 3 N = 오른쪽 2 N이라 평형이 아니에요.'},
+    {tag:'(다)',f:[{v:3,y:-14},{v:3,y:14}],ok:false,
+     why:'두 힘의 <strong>방향이 같아요</strong>. 합력은 3 N + 3 N = 오른쪽 6 N이라 평형이 아니에요.'},
+    {tag:'(라)',f:[{v:4,y:-30},{v:-4,y:30}],ok:false,
+     why:'크기는 같고 방향도 반대지만 <strong>같은 작용선 위에 있지 않아요</strong>. 블록이 빙글 돌게 되므로 평형이 아니에요.'}
+  ];
+  var judge=document.getElementById('judge');
+  J.forEach(function(c){
+    var U=21, cx=160, cy=72, s='';
+    s+='<svg viewBox="0 0 320 144" aria-label="'+c.tag+' 나무 블록에 작용하는 두 힘">';
+    s+='<rect x="'+(cx-38)+'" y="'+(cy-38)+'" width="76" height="76" rx="4" fill="#D39A63" stroke="#A5683A" stroke-width="3"/>';
+    s+='<rect x="'+(cx-28)+'" y="'+(cy-28)+'" width="56" height="56" rx="2" fill="none" stroke="#B97C49" stroke-width="1.5" opacity=".7"/>';
+    c.f.forEach(function(f){
+      var y=cy+f.y, d=f.v>0?1:-1, x1=cx, x2=cx+f.v*U, hl=13;
+      // 블록 밖으로 나가는 화살표가 잘 보이도록 시작점은 블록 중심선
+      s+='<line x1="'+x1+'" y1="'+y+'" x2="'+(x2-d*hl)+'" y2="'+y+'" stroke="#D6453D" stroke-width="5"/>';
+      s+='<polygon points="'+x2+','+y+' '+(x2-d*hl)+','+(y-8)+' '+(x2-d*hl)+','+(y+8)+'" fill="#D6453D"/>';
+      s+='<circle cx="'+x1+'" cy="'+y+'" r="4" fill="#1D2433"/>';
+      s+='<text x="'+(x2+d*8)+'" y="'+(y+5)+'" text-anchor="'+(d>0?'start':'end')+'" font-size="15" font-weight="700" fill="#1D2433">'+Math.abs(f.v)+' N</text>';
+    });
+    s+='</svg>';
+    var card=document.createElement('div'); card.className='jcard';
+    card.innerHTML='<div class="tag">'+c.tag+'</div><div style="background:#fff;border-radius:12px">'+s+'</div>'+
+      '<div class="choices" data-answer="'+(c.ok?'평형이다':'평형이 아니다')+'"><button class="choice">평형이다</button><button class="choice">평형이 아니다</button></div>'+
+      '<div class="fb" data-wrong="다시 보자! 크기·방향·작용선 세 가지 조건을 하나씩 확인해요.">'+'⭕ 정답! '+c.why+'</div>';
+    judge.appendChild(card);
+  });
+
+  document.querySelectorAll('.choices').forEach(bindChoices);
+
+  /* ---------- 빈칸 ---------- */
+  document.querySelectorAll('[data-blank]').forEach(function(b){
+    var q=b.closest('.q'), inp=q.querySelector('.blank'), fb=q.querySelector('.fb');
+    function go(){
+      var v=inp.value.replace(/\s/g,''), answers=inp.dataset.ans.split('|');
+      var ok=answers.indexOf(v)>-1;
+      inp.classList.toggle('right',ok); inp.classList.toggle('wrong',!ok);
+      fb.classList.add('show'); fb.classList.toggle('ok',ok); fb.classList.toggle('no',!ok);
+      fb.innerHTML=ok?'정답! <strong>'+answers[0].replace('힘의평형','힘의 평형')+'</strong>':(v?'다시 생각해 보자! 개념 설명을 다시 읽어 봐요.':'빈칸에 답을 먼저 써 보자.');
+    }
+    b.addEventListener('click',go);
+    inp.addEventListener('keydown',function(e){if(e.key==='Enter')go();});
+  });
+
+  /* ---------- 연결하기 ---------- */
+  document.getElementById('match-check').addEventListener('click',function(){
+    var all=true, fb=document.getElementById('match-fb');
+    document.querySelectorAll('#match select').forEach(function(sel){
+      var ok=sel.value===sel.dataset.ans; if(!ok)all=false;
+      sel.classList.toggle('right',ok); sel.classList.toggle('wrong',!ok);
+    });
+    fb.classList.add('show'); fb.classList.toggle('ok',all); fb.classList.toggle('no',!all);
+    fb.innerHTML=all?'정답! 두 힘이 평형을 이루려면 <strong>크기가 같고</strong>, <strong>방향이 반대</strong>이며, <strong>같은 직선(작용선) 위</strong>에 있어야 해요.':'빨간 칸을 다시 골라 보자. 그림 Ⅴ-4의 5 N, 5 N 화살표를 떠올려 봐요.';
+  });
+
+  /* ---------- 보기 고르기 ---------- */
+  document.querySelectorAll('#bogi .pick').forEach(function(p){
+    p.addEventListener('click',function(){p.setAttribute('aria-pressed',p.getAttribute('aria-pressed')!=='true');});
+  });
+  document.getElementById('bogi-check').addEventListener('click',function(){
+    var sel=[].slice.call(document.querySelectorAll('#bogi .pick[aria-pressed="true"]')).map(function(p){return p.dataset.k;}).join(',');
+    var ok=sel==='ㄱ,ㄷ', fb=document.getElementById('bogi-fb');
+    fb.classList.add('show'); fb.classList.toggle('ok',ok); fb.classList.toggle('no',!ok);
+    fb.innerHTML=ok?'<strong>답 ㄱ, ㄷ</strong> — 줄다리기 줄과 책상 위의 책은 작용하는 힘들의 합력이 0이라 움직이지 않아요. ㄴ은 두 힘이 같은 방향이라 합력이 0이 아니므로 상자가 움직여요.':
+      (sel?'아쉬워요! 합력이 <strong>0</strong>이라서 움직이지 않는(정지한) 경우를 찾아보자.':'보기에서 답을 먼저 골라 보자.');
+  });
+
+  /* ---------- 별점 ---------- */
+  document.querySelectorAll('.stars').forEach(function(s){
+    for(var i=1;i<=3;i++){
+      (function(n){
+        var b=document.createElement('button');b.textContent='★';b.setAttribute('aria-label','별 '+n+'개');
+        b.addEventListener('click',function(){s.querySelectorAll('button').forEach(function(x,k){x.classList.toggle('on',k<n)})});
+        s.appendChild(b);
+      })(i);
+    }
+  });
+
+  /* ---------- simulation ---------- */
+  var NS='http://www.w3.org/2000/svg';
+  var CELL=24, HALF=16, PAD=16, TOP=60, LANE=96;
+  var W=PAD*2+HALF*2*CELL, OX=PAD+HALF*CELL;
+  var H=TOP+LANE*3+32;
+  var svg=document.getElementById('sim');
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  var laneY=[TOP+48,TOP+48+LANE,TOP+48+LANE*2];
+  var COLORS=['var(--f1)','var(--f2)','var(--net)'];
+  var NAMES=['힘 ①','힘 ②','합력'];
+
+  var S={mode:'explore', f:[3,-5], guess:0, showNet:false, type:'mix', checked:null, reveal:false, solved:0, tried:0};
+
+  function el(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+
+  // static grid
+  var gGrid=el('g',{},svg);
+  for(var i=0;i<=HALF*2;i++){
+    var x=PAD+i*CELL, v=i-HALF;
+    el('line',{x1:x,y1:TOP,x2:x,y2:TOP+LANE*3,stroke:(v%4===0)?'var(--grid-major)':'var(--grid)','stroke-width':1},gGrid);
+    if(v%4===0) { var t=el('text',{x:x,y:TOP+LANE*3+20,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},gGrid); t.textContent=v; }
+  }
+  for(var j=0;j<=LANE*3/CELL;j++){
+    var y=TOP+j*CELL, border=(j%4===0);
+    el('line',{x1:PAD,y1:y,x2:W-PAD,y2:y,stroke:border?'var(--lane)':'var(--grid)','stroke-width':border?1.5:1},gGrid);
+  }
+  el('line',{x1:OX,y1:TOP-8,x2:OX,y2:TOP+LANE*3,stroke:'var(--ink)','stroke-width':1.5,'stroke-dasharray':'5 5',opacity:.55},gGrid);
+  var box=el('text',{id:'box',x:OX,y:TOP-14,'text-anchor':'middle','font-size':32},svg); box.textContent='📦';
+  var laneLabels=[];
+  for(var L=0;L<3;L++){
+    var lg=el('g',{},svg);
+    el('rect',{x:PAD+4,y:TOP+L*LANE+6,width:52,height:22,rx:6,fill:'var(--surface)',stroke:COLORS[L],'stroke-width':1.5},lg);
+    var lt=el('text',{x:PAD+30,y:TOP+L*LANE+22,'text-anchor':'middle','font-size':13,'font-weight':700,fill:COLORS[L]},lg); lt.textContent=NAMES[L];
+    laneLabels.push(lg);
+  }
+  var gArrows=el('g',{},svg);
+  var hits=[];
+  for(var h=0;h<3;h++){ hits.push(el('rect',{x:PAD,y:TOP+h*LANE,width:W-PAD*2,height:LANE,fill:'transparent','data-lane':h},svg)); }
+
+  function arrow(v,y,color,label,opts){
+    opts=opts||{};
+    var g=el('g',{},gArrows);
+    if(opts.ghost) g.setAttribute('opacity','.9');
+    if(v===0){
+      el('circle',{cx:OX,cy:y,r:7,fill:color},g);
+      var t0=el('text',{x:OX+14,y:y-12,'font-size':15,'font-weight':700,fill:color},g); t0.textContent=label;
+      return;
+    }
+    var s=v>0?1:-1, x2=OX+v*CELL, hl=Math.min(18,Math.abs(v)*CELL);
+    var dash=opts.ghost?{'stroke-dasharray':'6 5'}:{};
+    if(opts.ghost){
+      var p=el('path',{d:'M'+OX+' '+(y-5)+'H'+(x2-s*hl)+'V'+(y-12)+'L'+x2+' '+y+'L'+(x2-s*hl)+' '+(y+12)+'V'+(y+5)+'H'+OX+'Z',fill:'none',stroke:color,'stroke-width':2},g);
+      for(var k in dash)p.setAttribute(k,dash[k]);
+    }else{
+      el('line',{x1:OX,y1:y,x2:x2-s*(hl-2),y2:y,stroke:color,'stroke-width':8},g);
+      el('polygon',{points:x2+','+y+' '+(x2-s*hl)+','+(y-12)+' '+(x2-s*hl)+','+(y+12),fill:color},g);
+      el('circle',{cx:OX,cy:y,r:5,fill:'var(--ink)'},g);
+      if(opts.handle) el('circle',{cx:x2,cy:y,r:16,fill:color,opacity:.15},g);
+    }
+    var t=el('text',{x:x2+s*10,y:y+5,'text-anchor':s>0?'start':'end','font-size':15,'font-weight':700,fill:color},g);
+    if(Math.abs(v)>=HALF-1){t.setAttribute('x',x2-s*6);t.setAttribute('y',y-18);t.setAttribute('text-anchor',s>0?'end':'start');}
+    t.textContent=label;
+  }
+
+  function net(){return S.f[0]+S.f[1];}
+  function dirWord(v){return v>0?'오른쪽':(v<0?'왼쪽':'');}
+  function fmt(v){return v===0?'0 N':dirWord(v)+' '+Math.abs(v)+' N';}
+
+  function explain(a,b){
+    var n=a+b;
+    if(a===0||b===0){return {f:'힘이 하나뿐 → 합력 '+Math.abs(n)+' N',d:n===0?'작용하는 힘이 없어요.':'작용하는 그 힘이 곧 합력이에요. 방향: '+dirWord(n)};}
+    if(a*b>0) return {f:Math.abs(a)+' N + '+Math.abs(b)+' N = '+Math.abs(n)+' N',d:'같은 방향 → 크기는 <strong>더하고</strong>, 방향은 두 힘과 같은 <strong>'+dirWord(n)+'</strong>'};
+    var big=Math.max(Math.abs(a),Math.abs(b)), sm=Math.min(Math.abs(a),Math.abs(b));
+    if(n===0) return {f:big+' N − '+sm+' N = 0 N',d:'크기가 같고 방향이 반대 → 합력이 <strong>0</strong>이라 물체는 움직이지 않아요.'};
+    return {f:big+' N − '+sm+' N = '+Math.abs(n)+' N',d:'반대 방향 → 큰 힘에서 작은 힘을 <strong>빼고</strong>, 방향은 큰 힘('+big+' N)의 방향인 <strong>'+dirWord(n)+'</strong>'};
+  }
+
+  var panel=document.getElementById('panel'), result=document.getElementById('result'), actions=document.getElementById('actions'), howto=document.getElementById('howto'), types=document.getElementById('quiz-types');
+
+  function editable(l){return S.mode==='explore'?l<2:l===2&&S.checked!=='ok';}
+  function limit(l){return l===2?HALF:8;}
+  function getV(l){return l<2?S.f[l]:(S.mode==='quiz'?S.guess:net());}
+  function setV(l,v){v=Math.max(-limit(l),Math.min(limit(l),v)); if(l<2)S.f[l]=v; else {S.guess=v; if(S.checked==='bad')S.checked=null;} render();}
+
+  function render(){
+    gArrows.innerHTML='';
+    arrow(S.f[0],laneY[0],COLORS[0],fmt(S.f[0]),{handle:editable(0)});
+    arrow(S.f[1],laneY[1],COLORS[1],fmt(S.f[1]),{handle:editable(1)});
+    if(S.mode==='explore'){
+      if(S.showNet) arrow(net(),laneY[2],COLORS[2],fmt(net()));
+      else { var q=el('text',{x:OX,y:laneY[2]+6,'text-anchor':'middle','font-size':16,fill:'var(--muted)'},gArrows); q.textContent='합력은? 「합력 보기」를 눌러 확인해요'; }
+    } else {
+      if(S.reveal) arrow(net(),laneY[2],COLORS[2],'',{ghost:true});
+      arrow(S.guess,laneY[2],COLORS[2],fmt(S.guess),{handle:editable(2)});
+    }
+    hits.forEach(function(r,i){r.setAttribute('class',editable(i)?'lane-hit':'lane-lock');});
+
+    // panel
+    panel.innerHTML='';
+    [0,1,2].forEach(function(l){
+      if(S.mode==='explore'&&l===2)return;
+      var d=document.createElement('div'); d.className='ctl c'+(l+1);
+      var ed=editable(l), v=getV(l);
+      d.innerHTML='<div><div class="lbl">'+(l===2?'내가 그린 합력':NAMES[l])+'</div><div class="val">'+fmt(v)+'</div></div>'+
+        (ed?'<div class="step"><button aria-label="'+NAMES[l]+' 왼쪽으로 1 N" data-l="'+l+'" data-d="-1">◀</button><button aria-label="'+NAMES[l]+' 오른쪽으로 1 N" data-l="'+l+'" data-d="1">▶</button></div>':'<div class="val" style="color:var(--muted)">🔒 고정</div>');
+      panel.appendChild(d);
+    });
+    panel.querySelectorAll('button[data-l]').forEach(function(b){
+      b.disabled=Math.abs(getV(+b.dataset.l)+ +b.dataset.d)>limit(+b.dataset.l);
+      b.onclick=function(){setV(+b.dataset.l,getV(+b.dataset.l)+ +b.dataset.d);};
+    });
+
+    // result + actions
+    result.className='result';
+    var e=explain(S.f[0],S.f[1]);
+    if(S.mode==='explore'){
+      howto.textContent='빨강·파랑 화살표 줄을 좌우로 끌거나 ◀ ▶ 버튼으로 두 힘의 크기와 방향을 바꿔 보세요. 가운데 점선을 넘기면 방향이 바뀌어요.';
+      result.innerHTML=S.showNet?'<div class="formula">합력 '+fmt(net())+'</div><div>'+e.f+' · '+e.d+'</div>':'<div style="color:var(--muted)">두 힘의 합력을 먼저 예상해 본 뒤 「합력 보기」를 눌러 확인해요.</div>';
+      actions.innerHTML='<button class="btn" id="a-net">'+(S.showNet?'합력 숨기기':'합력 보기')+'</button><button class="btn ghost" id="a-same">같은 방향 예시</button><button class="btn ghost" id="a-opp">반대 방향 예시</button>';
+      document.getElementById('a-net').onclick=function(){S.showNet=!S.showNet;render();};
+      document.getElementById('a-same').onclick=function(){S.f=[3,5];S.showNet=false;render();};
+      document.getElementById('a-opp').onclick=function(){S.f=[7,-4];S.showNet=false;render();};
+    } else {
+      howto.textContent='보라색 「합력」 줄을 좌우로 끌거나 ◀ ▶ 버튼으로 합력 화살표를 그린 뒤 「정답 확인」을 눌러요.';
+      if(S.checked==='ok'){result.className='result ok';result.innerHTML='<div class="formula">🎉 정답! 합력 '+fmt(net())+'</div><div>'+e.f+' · '+e.d+'</div>';}
+      else if(S.checked==='bad'){
+        result.className='result bad';
+        var n=net(), g=S.guess, msg;
+        if(n!==0&&g!==0&&Math.sign(n)!==Math.sign(g)) msg='<strong>방향</strong>을 다시 봐요. '+(S.f[0]*S.f[1]>0?'두 힘이 같은 방향이면 합력도 그 방향이에요.':'두 힘이 반대 방향이면 합력은 <strong>큰 힘</strong>의 방향이에요.');
+        else msg='<strong>크기</strong>를 다시 세어 봐요. '+(S.f[0]*S.f[1]>0?'같은 방향이면 두 힘의 크기를 더해요.':'반대 방향이면 큰 힘에서 작은 힘을 빼요.');
+        result.innerHTML='🤔 아쉬워요! '+msg+(S.reveal?'<div class="formula" style="margin-top:6px">정답: '+fmt(n)+' ('+e.f+')</div>':'');
+      }
+      else result.innerHTML='<div>두 힘 <strong style="color:var(--f1)">'+fmt(S.f[0])+'</strong>, <strong style="color:var(--f2)">'+fmt(S.f[1])+'</strong>의 합력을 화살표로 그려 보자.</div>';
+      actions.innerHTML='<button class="btn" id="a-check"'+(S.checked==='ok'?' disabled style="opacity:.5"':'')+'>정답 확인</button>'+
+        (S.checked==='bad'&&!S.reveal?'<button class="btn ghost" id="a-show">정답 보기</button>':'')+
+        '<button class="btn '+(S.checked==='ok'?'':'ghost')+'" id="a-new">새 문제</button><span class="score">맞힌 문제 '+S.solved+' / 푼 문제 '+S.tried+'</span>';
+      document.getElementById('a-check').onclick=check;
+      var sh=document.getElementById('a-show'); if(sh) sh.onclick=function(){S.reveal=true;render();};
+      document.getElementById('a-new').onclick=newQ;
+    }
+    types.classList.toggle('hidden',S.mode!=='quiz');
+  }
+
+  var counted=false;
+  function check(){
+    if(!counted){S.tried++;counted=true;}
+    if(S.guess===net()){
+      if(S.checked!=='ok')S.solved++;
+      S.checked='ok'; render(); moveBox(net());
+    } else { S.checked='bad'; render(); }
+  }
+  function moveBox(n){
+    var dx=n===0?0:Math.sign(n)*Math.min(Math.abs(n),8)*CELL*0.6;
+    if(n===0){box.style.transform='translateX(4px)';setTimeout(function(){box.style.transform='translateX(-4px)';},150);setTimeout(function(){box.style.transform='';},300);return;}
+    box.style.transform='translateX('+dx+'px)';
+    setTimeout(function(){box.style.transform='';},1300);
+  }
+  function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function newQ(){
+    var t=S.type==='mix'?(Math.random()<.5?'same':'opp'):S.type;
+    var s=Math.random()<.5?1:-1, a, b, prev=S.f.join();
+    do{
+      if(t==='same'){a=rnd(1,7);b=rnd(1,7);S.f=[s*a,s*b];}
+      else{a=rnd(1,8);b=Math.random()<.12?a:rnd(1,8);S.f=[s*a,-s*b];}
+    }while(S.f.join()===prev);
+    S.guess=0;S.checked=null;S.reveal=false;counted=false;render();
+  }
+
+  // pointer drag
+  var drag=null;
+  function toX(evt){var pt=svg.createSVGPoint();pt.x=evt.clientX;pt.y=evt.clientY;return pt.matrixTransform(svg.getScreenCTM().inverse()).x;}
+  svg.addEventListener('pointerdown',function(e){
+    var l=e.target.getAttribute&&e.target.getAttribute('data-lane');
+    if(l===null||l===undefined)return; l=+l;
+    if(!editable(l))return;
+    drag=l; svg.setPointerCapture(e.pointerId); upd(e); e.preventDefault();
+  });
+  svg.addEventListener('pointermove',function(e){if(drag!==null)upd(e);});
+  function end(){drag=null;}
+  svg.addEventListener('pointerup',end); svg.addEventListener('pointercancel',end);
+  function upd(e){var v=Math.round((toX(e)-OX)/CELL); if(v!==getV(drag))setV(drag,v);}
+
+  // mode switching
+  var mE=document.getElementById('m-explore'), mQ=document.getElementById('m-quiz');
+  mE.onclick=function(){S.mode='explore';mE.setAttribute('aria-pressed','true');mQ.setAttribute('aria-pressed','false');S.f=[3,-5];S.showNet=false;render();};
+  mQ.onclick=function(){S.mode='quiz';mQ.setAttribute('aria-pressed','true');mE.setAttribute('aria-pressed','false');newQ();};
+  types.querySelectorAll('button').forEach(function(b){
+    b.onclick=function(){S.type=b.dataset.type;types.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b);});newQ();};
+  });
+
+  render();
+
+})();
+</script>
+</body>
+</html>
